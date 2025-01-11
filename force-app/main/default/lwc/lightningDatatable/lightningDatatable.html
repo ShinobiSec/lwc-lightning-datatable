@@ -1,0 +1,28 @@
+<template>
+  <lightning-card title="LWC lightning-datatable">
+      <lightning-layout multiple-rows="true" vertical-align="end" class="slds-box">
+          <lightning-layout-item size="4" padding="around-small">
+            <lightning-input type="text" label="Search account contacts by name" value={key} onchange={updateKey}></lightning-input>
+          </lightning-layout-item>
+
+          <lightning-layout-item size="4" padding="around-small">
+            <lightning-input type="text" label="Search account contacts by email" value={email} onchange={updateEmail}></lightning-input>
+          </lightning-layout-item>
+
+          <lightning-layout-item size="4" padding="around-small">
+            <lightning-button label="Clear Filters / Show All" variant="brand" onclick={clearFilters}></lightning-button>
+          </lightning-layout-item>
+          
+          <lightning-layout-item size="12" style="height: 125px">
+            <lightning-datatable
+              show-row-number-column hide-checkbox-column
+              key-field="Id"
+              data={contacts}
+              columns={columns}
+              enable-infinite-loading="true"
+              onloadmore={handleViewMoreRecords}>
+            </lightning-datatable>
+          </lightning-layout-item>
+      </lightning-layout>
+  </lightning-card>
+</template>

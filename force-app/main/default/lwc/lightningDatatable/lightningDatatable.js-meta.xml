@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <!-- isExposed must equal true to expose the component in the page editor -->
+    <isExposed>True</isExposed>
+    <!-- Targets define where the component can be utilized. 
+    See https://developer.salesforce.com/docs/platform/lwc/guide/reference-configuration-tags.html for more information
+    -->
+    <targets>
+    <target>lightning__RecordPage</target>
+    </targets>
+</LightningComponentBundle>
