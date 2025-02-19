@@ -8,30 +8,31 @@ public with sharing class LightningDatatableController {
         // Create a list of contacts to be returned
         List<Contact> contacts = new List<Contact>();
 
-        // Create variables for dynamic SOQL query
-        String query;
+    //Create map for query with binds
+        Map<String, Object> params = new Map<String, Object>{'accountId' => accountId, 'name' => '%' + name + '%', 'email' => '%' + email + '%', 'rows' => rows};
         
-        // Create a dynamic query
-        String condition = (String.isNotBlank(accountId)
-            ? 'AccountId = \'' + accountId + '\''
-            : '');
-
-        condition += (String.isNotBlank(name)
-        ? (String.isNotBlank(condition) ? + ' AND ' : '') +
-        'Name LIKE \'' + '%' + name + '%\''
-        : '');
-
-        condition += (String.isNotBlank(email)
-        ? (String.isNotBlank(condition) ? + ' AND ' : '') +
-        'Email LIKE \'' + '%' + email + '%\''
-        : '');
-
-        if (String.isNotEmpty(condition))
-        {   
-            query = 'SELECT Id, Name, Email, Title, CreatedDate FROM Contact WHERE ' + condition + ' WITH SECURITY_ENFORCED ORDER BY CreatedDate ASC LIMIT :rows';
-            System.debug('query: ' + query);
-            contacts = Database.query(query);
-        } 
+        //Perform query based on existing params
+        
+        if(accountId != NULL && string.isNotBlank(name) && string.isNotBlank(email)){
+            String query = 'SELECT Id, Name, Email FROM Contact WHERE AccountId = :accountId AND Name LIKE :name AND Email LIKE :email LIMIT :rows';
+            contacts = Database.queryWithBinds(query, params, AccessLevel.USER_MODE);
+        }
+        
+        else if(accountId != NULL && string.isNotBlank(name)){
+            String query = 'SELECT Id, Name, Email FROM Contact WHERE AccountId = :accountId AND Name LIKE :name LIMIT :rows';
+            contacts = Database.queryWithBinds(query, params, AccessLevel.USER_MODE);
+        }
+        
+        else if(accountId != NULL && string.isNotBlank(email)){
+            String query = 'SELECT Id, Name, Email FROM Contact WHERE AccountId = :accountId AND Email LIKE :email LIMIT :rows';
+            contacts = Database.queryWithBinds(query, params, AccessLevel.USER_MODE);
+        }
+        
+        else if(accountId != NULL){
+            String query = 'SELECT Id, Name, Email FROM Contact WHERE AccountId = :accountId LIMIT :rows';
+            contacts = Database.queryWithBinds(query, params, AccessLevel.USER_MODE);
+        }
+                   
         return contacts;
     }
 //Ending bracket
